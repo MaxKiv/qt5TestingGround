@@ -1,0 +1,77 @@
+cmake_minimum_required(VERSION 3.16.3)
+
+project(qt_testing VERSION 0.1 LANGUAGES CXX)
+
+# set install dir
+set(CMAKE_INSTALL_PREFIX "${PROJECT_SOURCE_DIR}/stage")
+
+set(CMAKE_AUTOMOC ON)
+# set(CMAKE_AUTORCC ON)
+# set(CMAKE_AUTOUIC ON)
+
+# set compiler flags
+SET(GCC_COVERAGE_COMPILE_FLAGS "-Wall -pedantic -g")
+SET(GCC_COVERAGE_LINK_FLAGS    "-v")
+
+# add compiler flags
+SET(CMAKE_CXX_FLAGS  "${CMAKE_CXX_FLAGS} ${GCC_COVERAGE_COMPILE_FLAGS}")
+SET(CMAKE_EXE_LINKER_FLAGS  "${CMAKE_EXE_LINKER_FLAGS} ${GCC_COVERAGE_LINK_FLAGS}")
+
+find_package(Qt5 COMPONENTS Core REQUIRED)
+
+# specify main executable
+add_executable(main main.cpp)
+
+
+# Make libCollatz optional
+option(USE_LIB "Use Extra lib" ON)
+
+# configure a header file to pass some of the CMake settings to the source code
+configure_file(libConfig.h.in libConfig.h)
+
+# include_directories(${CMAKE_SOURCE_DIR}/inc)
+# link_directories(libcollatz)
+# add_subdirectory(libcollatz)
+
+if(USE_LIB)
+  # if use: add subdir, append lib to list of libs/includes to use below
+  # add_subdirectory(libcollatz)
+  # list(APPEND EXTRA_LIBS libcollatz)
+
+  # lib properties
+  # set_target_properties(libcollatz PROPERTIES LINKER_LANGUAGE CXX)
+endif()
+
+# link to optional libs
+# target_link_libraries(main PUBLIC ${EXTRA_LIBS}) # libbar.so is found in ${CMAKE_SOURCE_DIR}/lib
+target_link_libraries(main Qt5::Core)
+
+# add the binary tree to the search path for include files so that we will find ilbCollatzConfig.h
+target_include_directories(main PUBLIC
+                            "${PROJECT_BINARY_DIR}"
+                          )
+
+
+# properties
+set_property(TARGET main PROPERTY CXX_STANDARD 17)
+
+# installation
+install(TARGETS main DESTINATION bin)
+# install(FILES "${PROJECT_SOURCE_DIR}/libcollatz/libcollatz.h" DESTINATION include)
+
+# Testing!
+# enable_testing()
+
+# does the application run?
+# add_test(NAME Runs COMMAND main 4 1)
+
+# define a function to simplify adding tests - end to end test
+# function (do_test target init iter result)
+#   add_test(NAME Comp${init} COMMAND ${target} ${init} ${iter})
+#   set_tests_properties(Comp${init}
+#     PROPERTIES PASS_REGULAR_EXPRESSION ${result}
+#   )
+# endfunction()
+
+# do tests
+# do_test(main 4 1 "2")

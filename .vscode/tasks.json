@@ -1,0 +1,41 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"type": "cppbuild",
+			"label": "C/C++: clang++-10 build active file",
+			"command": "/usr/bin/clang++-10",
+			"args": [
+				"main.cpp",
+				"-I /usr/include/x86_64-linux-gnu/qt5/ -std=c++17 -fPIC -DQT_NO_VERSION_TAGGING -L /usr/lib/x86_64-linux-gnu/ -lQtCore -g"
+			],
+			"options": {
+				"cwd": "${fileDirname}"
+			},
+			"problemMatcher": [
+				"$gcc"
+			],
+			"group": "build",
+			"detail": "compiler: /usr/bin/clang++-10"
+		},
+		{
+			"type": "cppbuild",
+			"label": "CMake build & make project",
+			"command": "/usr/bin/bash",
+			"args": [
+				"./build.sh"
+			],
+			"options": {
+				"cwd": "${fileDirname}"
+			},
+			"problemMatcher": [
+				"$gcc"
+			],
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			},
+			"detail": "Use CMake to build the current project"
+		}
+	]
+}
